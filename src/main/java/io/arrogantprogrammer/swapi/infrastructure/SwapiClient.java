@@ -41,7 +41,11 @@ public interface SwapiClient {
     @Path("/species/{id}")
     SpeciesRecord getSpecies(@PathParam("id") int id);
 
-//    @GET
-//    @Path("/vehicles/")
-//    VehicleResponse getAllVehicles();
+    @GET
+    @Path("/starships/")
+    StarshipsResponse getAllStarships();
+
+    @GET
+    @Path("/starships/{id}")
+    StarshipRecord getStarships(@PathParam("id") int id);
 }

@@ -112,4 +112,30 @@ public class SwapiClientTest {
         assertEquals(6, speciesRecord.filmURIs().size());
 
     }
+
+    @Test
+    public void testStarshipsResponse() {
+        StarshipsResponse starshipsResponse = swapiClient.getAllStarships();
+        assertNotNull(starshipsResponse);
+        assertEquals(36, starshipsResponse.count());
+    }
+
+    @Test
+    public void testStarshipRecord() {
+        StarshipRecord starshipRecord = swapiClient.getStarships(2);
+        assertEquals("CR90 corvette", starshipRecord.name());
+        assertEquals("https://swapi.dev/api/starships/2/", starshipRecord.url().toString());
+        assertEquals("3500000", starshipRecord.costInCredits());
+        assertEquals("150", starshipRecord.length());
+        assertEquals("2.0", starshipRecord.hyperdriveRating());
+        assertEquals("950", starshipRecord.maxAtmospheringSpeed());
+        assertEquals("Corellian Engineering Corporation", starshipRecord.manufacturer());
+        assertEquals("1 year", starshipRecord.consumables());
+        assertEquals("3000000", starshipRecord.cargoCapacity());
+        assertEquals("30-165", starshipRecord.crew());
+        assertEquals("600", starshipRecord.passengers());
+        assertEquals("https://swapi.dev/api/films/1/", starshipRecord.filmURIs().get(0).toString());
+        assertEquals("https://swapi.dev/api/films/3/", starshipRecord.filmURIs().get(1).toString());
+        assertEquals("https://swapi.dev/api/films/6/", starshipRecord.filmURIs().get(2).toString());
+    }
 }
