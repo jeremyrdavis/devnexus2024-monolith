@@ -86,4 +86,30 @@ public class SwapiClientTest {
         assertEquals("150000", vehicleRecord.costInCredits());
         assertEquals("30", vehicleRecord.maxAtmospheringSpeed());
     }
+
+    @Test
+    public void testSpeciesResponse() {
+        SpeciesResponse speciesResponse = swapiClient.getAllSpecies();
+        assertNotNull(speciesResponse);
+        assertEquals(37, speciesResponse.count());
+    }
+
+    @Test
+    public void testSpeciesRecord() {
+
+        SpeciesRecord speciesRecord = swapiClient.getSpecies(1);
+        assertEquals("Human", speciesRecord.name());
+        assertEquals("mammal", speciesRecord.classification());
+        assertEquals("sentient", speciesRecord.designation());
+        assertEquals("180", speciesRecord.averageHeight());
+        assertEquals("120", speciesRecord.averageLifespan());
+        assertEquals("caucasian, black, asian, hispanic", speciesRecord.skinColors());
+        assertEquals("brown, blue, green, hazel, grey, amber", speciesRecord.eyeColors());
+        assertEquals("blonde, brown, black, red", speciesRecord.hairColors());
+        assertEquals("https://swapi.dev/api/planets/9/", speciesRecord.homeworldURI());
+        assertEquals("Galactic Basic", speciesRecord.language());
+        assertEquals(4, speciesRecord.peopleURIs().size());
+        assertEquals(6, speciesRecord.filmURIs().size());
+
+    }
 }

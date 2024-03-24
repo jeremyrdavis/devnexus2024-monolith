@@ -32,11 +32,15 @@ public interface SwapiClient {
     @GET
     @Path("/vehicles/{id}")
     VehicleRecord getVehicle(@PathParam("id") int id);
-//
-//    @GET
-//    @Path("/species/")
-//    SpeciesResponse getAllSpecies();
-//
+
+    @GET
+    @Path("/species/")
+    SpeciesResponse getAllSpecies();
+
+    @GET
+    @Path("/species/{id}")
+    SpeciesRecord getSpecies(@PathParam("id") int id);
+
 //    @GET
 //    @Path("/vehicles/")
 //    VehicleResponse getAllVehicles();
