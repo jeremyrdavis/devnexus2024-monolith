@@ -36,10 +36,10 @@ public class SwapiClientTest {
         assertEquals("George Lucas", filmRecord.director());
         assertEquals("Gary Kurtz, Rick McCallum", filmRecord.producer());
         assertEquals("1977-05-25", filmRecord.releaseDate());
-        assertEquals(3, filmRecord.peopleURIs().size());
+        assertEquals(18, filmRecord.peopleURIs().size());
         assertEquals(3, filmRecord.planetURIs().size());
-        assertEquals(3, filmRecord.starshipURIs().size());
-        assertEquals(2, filmRecord.vehicleURIs().size());
+        assertEquals(8, filmRecord.starshipURIs().size());
+        assertEquals(4, filmRecord.vehicleURIs().size());
         assertEquals(5, filmRecord.speciesURIs().size());
         assertTrue(filmRecord.openingCrawl().contains("It is a period of civil war."));
     }

@@ -16,6 +16,7 @@ public record PersonRecord(
         String skinColor,
         @JsonProperty("eye_color")
         String eyeColor,
+        @JsonProperty("birth_year")
         String birthYear,
         String gender,
         String homeworld,
