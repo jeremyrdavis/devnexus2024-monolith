@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.with;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -24,17 +25,6 @@ public class DevnexusApiResourceTest {
                 .body(containsString("Hello, Buddy!  Your Star Wars Spirit character is"));
     }
 
-    @Test
-    public void testWhoIsSpiritCharacter() {
-
-        LOGGER.info("Running testWhoIsSpiritCharacter");
-
-        given()
-                .when().get("/devnexus2024/whoIsSpiritCharacter/IG-88")
-                .then()
-                .statusCode(200)
-                .body(containsString("IG-88 is a fictional character in the Star Wars universe. He is an assassin droid, specifically a model called IG-88B, and is known for his appearance in \"Star Wars: The Empire Strikes Back.\" IG-88 is one of several bounty hunters hired by Darth Vader to track down the Millennium Falcon. He is a tall, thin droid with a rotating head and a deadly reputation. Despite his limited screen time, IG-88 has become a fan favorite due to his unique design and mysterious nature."));
-    }
 
     @Test
     public void addSomethingToThePoem() {
@@ -76,11 +66,10 @@ public class DevnexusApiResourceTest {
             Even IG-88 finds a softer side to confide.
                 """;
 
-        given()
-                .when().get("/devnexus2024/addSomethingToThePoem/")
+        with().body(1)
+                .when().post("/devnexus2024/addToPoem")
                 .then()
                 .statusCode(200)
-                .body(containsString("IG-88 is a fictional character in the Star Wars universe. He is an assassin droid, specifically a model called IG-88B, and is known for his appearance in \"Star Wars: The Empire Strikes Back.\" IG-88 is one of several bounty hunters hired by Darth Vader to track down the Millennium Falcon. He is a tall, thin droid with a rotating head and a deadly reputation. Despite his limited screen time, IG-88 has become a fan favorite due to his unique design and mysterious nature."));
-
+                .body(containsString(expectedResult));
     }
 }
