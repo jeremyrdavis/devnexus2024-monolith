@@ -1,15 +1,20 @@
 package io.arrogantprogrammer.devnexusapp;
 
-import io.arrogantprogrammer.devnexusapp.domain.StarWarsSpiritCharacterAssignment;
+import io.arrogantprogrammer.devnexusapp.domain.CharacterAssignment;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.slf4j.Logger;
+
+import java.net.URI;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Path("/devnexus2024")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class DevnexusApiResource {
 
     private static final Logger LOGGER = getLogger(DevnexusApiResource.class);
@@ -18,30 +23,44 @@ public class DevnexusApiResource {
     @Inject
     StarWarsSpiritCharacterService starWarsSpiritCharacterService;
 
-    @GET
-    @Path("/{name}")
-    public String assignSpiritCharacter(String name) {
-        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = starWarsSpiritCharacterService.assignSpiritCharacter(name);
-        return "Hello, %s!  Your Star Wars Spirit character is %s.".formatted(name, starWarsSpiritCharacterAssignment.characterName());
+    @POST
+    @Path("/assign")
+    public Response assignSpiritCharacter(String name) {
+        CharacterAssignment characterAssignment = starWarsSpiritCharacterService.assignSpiritCharacter(name);
+        return Response.created(URI.create("/assignment/" + characterAssignment.id())).entity(characterAssignment).build();
     }
 
     @GET
-    @Path("/whoIsSpiritCharacter/{character}")
-    public String whoIsSpiritCharacter(@PathParam("character") String character) {
-        return starWarsSpiritCharacterService.whoIs(character);
+    @Path("/whoIs/{id}")
+    @Transactional
+    public CharacterAssignment whoIsSpiritCharacter(@PathParam("id") Long id) {
+        LOGGER.debug("Getting whoIs for id: {}", id);
+        CharacterAssignment characterAssignment = starWarsSpiritCharacterService.whoIs(id);
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
+        return characterAssignment;
     }
 
     @GET
-    @Path("/aPoemAbout/{character}")
-    public String aPoemAbout(@PathParam("character") String character) {
-        return starWarsSpiritCharacterService.aPoemAbout(character);
+    @Path("/aPoemAbout/{id}")
+    @Transactional
+    public CharacterAssignment aPoemAbout(@PathParam("id") Long id) {
+        LOGGER.debug("Getting a poem for id: {}", id);
+        CharacterAssignment characterAssignment = starWarsSpiritCharacterService.aPoemAbout(id);
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
+        return characterAssignment;
     }
 
     @GET
     @Path("/addToPoem/{id}")
-    public String addToPoem(@PathParam("id") int id) {
-        return "Added to poem";
+    @Transactional
+    public CharacterAssignment addToPoem(@PathParam("id") Long id) {
+        LOGGER.debug("Adding to poem for id: {}", id);
+        CharacterAssignment characterAssignment = starWarsSpiritCharacterService.addToPoem(id);
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
+        return characterAssignment;
     }
+
+
 
 
 }

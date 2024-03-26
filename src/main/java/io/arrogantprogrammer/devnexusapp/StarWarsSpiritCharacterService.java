@@ -1,7 +1,7 @@
 package io.arrogantprogrammer.devnexusapp;
 
-import io.arrogantprogrammer.devnexusapp.domain.StarWarsSpiritCharacterAssignment;
-import io.arrogantprogrammer.devnexusapp.domain.StarWarsSpiritCharacterAssignmentRepository;
+import io.arrogantprogrammer.devnexusapp.domain.*;
+import io.arrogantprogrammer.openapi.OpenApiService;
 import io.arrogantprogrammer.swapi.domain.PersonRecord;
 import io.arrogantprogrammer.swapi.infrastructure.SwapiClient;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -23,47 +23,45 @@ public class StarWarsSpiritCharacterService {
     SwapiClient swapiClient;
 
     @Inject
-    StarWarsSpiritCharacterAssignmentRepository starWarsSpiritCharacterAssignmentRepository;
+    OpenApiService openApiService;
+
+    @Inject
+    StarWarsSpiritCharacterAssignmentRepository repository;
 
     @Transactional
-    public StarWarsSpiritCharacterAssignment assignSpiritCharacter(final String name) {
+    public CharacterAssignment assignSpiritCharacter(final String name) {
+        LOGGER.debug("Running assignSpiritCharacter");
         if(count == 0) {
-            LOGGER.info("Running getRandomStarWarsCharacter");
             count = swapiClient.getAllPeople().count();
+            LOGGER.debug("Count is {}", count);
         }
         PersonRecord personRecord = swapiClient.getPerson((int) (Math.random() * (count - 1)) + 1);
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = new StarWarsSpiritCharacterAssignment(name, personRecord.name());
-        starWarsSpiritCharacterAssignmentRepository.persist(starWarsSpiritCharacterAssignment);
-        return starWarsSpiritCharacterAssignment;
+        repository.persist(starWarsSpiritCharacterAssignment);
+        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName());
     }
 
-    public String whoIs(final String character) {
-        return """
-        IG-88 is a fictional character in the Star Wars universe. He is an assassin droid, specifically a model called IG-88B, and is known for his appearance in "Star Wars: The Empire Strikes Back." IG-88 is one of several bounty hunters hired by Darth Vader to track down the Millennium Falcon. He is a tall, thin droid with a rotating head and a deadly reputation. Despite his limited screen time, IG-88 has become a fan favorite due to his unique design and mysterious nature.
-        """;
+    public CharacterAssignment whoIs(Long id) {
+        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
+        String whoIs = openApiService.whoIsCharacter(starWarsSpiritCharacterAssignment.getCharacterName());
+        starWarsSpiritCharacterAssignment.setWhoIs(whoIs);
+        repository.persist(starWarsSpiritCharacterAssignment);
+        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), whoIs);
     }
 
-    public String aPoemAbout(String character) {
-        return """
-                In the cold metal heart of a droid, they say,
-                Lies the soul of a hunter, fierce and gray.
-                IG-88, with eyes of gleaming red,
-                A silent killer, a relentless dread.
-                                
-                In the shadows of starships, he does lurk,
-                A figure of fear, a shadowy dirk.
-                His blaster poised, his sensors keen,
-                A machine of death, a hunter unseen.
-                                
-                No mercy in his circuits, no pity in his gaze,
-                Only the hunt, in its endless maze.
-                Through galaxies he roams, a specter of steel,
-                His mission clear, his purpose real.
-                                
-                IG-88, a legend in the stars,
-                Feared by many, but known by few.
-                In the depths of space, he prowls and roars,
-                A droid of death, forever true.
-                """;
+    public CharacterAssignment aPoemAbout(Long id) {
+        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
+        String poem  = openApiService.writeAPoem(starWarsSpiritCharacterAssignment.getCharacterName(), POET.randomPoet());
+        starWarsSpiritCharacterAssignment.setPoem(poem);
+        repository.persist(starWarsSpiritCharacterAssignment);
+        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem());
+    }
+
+    public CharacterAssignment addToPoem(Long id) {
+        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
+        String updatedPoem  = openApiService.addThisToThePoem(POETICADDITION.addition(), starWarsSpiritCharacterAssignment.getPoem());
+        starWarsSpiritCharacterAssignment.setUpdatedPoem(updatedPoem);
+        repository.persist(starWarsSpiritCharacterAssignment);
+        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem());
     }
 }
