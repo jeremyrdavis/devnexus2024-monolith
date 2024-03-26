@@ -75,4 +75,9 @@ public class StarWarsSpiritCharacterService {
         starWarsSpiritCharacterAssignment.persist();
         return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem(), starWarsSpiritCharacterAssignment.isLiked());
     }
+
+    public void addFeedback(FeedbackRecord feedbackRecord) {
+        LOGGER.debug("Adding feedback for id: {}", feedbackRecord.id());
+        repository.recordFeedback(feedbackRecord);
+    }
 }

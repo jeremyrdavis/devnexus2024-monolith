@@ -1,22 +1,26 @@
 package io.arrogantprogrammer.devnexusapp;
 
+import io.arrogantprogrammer.devnexusapp.domain.Feedback;
 import io.arrogantprogrammer.devnexusapp.domain.StarWarsSpiritCharacterAssignment;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.transaction.Transactional;
+import jakarta.ws.rs.HEAD;
+import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @QuarkusTest
-public class LikeSpiritCharacterTest extends ResourceTest{
+public class FeedbackTest extends ResourceTest{
 
     @BeforeEach @Transactional
-    public void setUp() {
+    public void setup() {
         LOGGER.info("Setting up test");
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = new StarWarsSpiritCharacterAssignment(name, charachter);
+        starWarsSpiritCharacterAssignment.setLiked(true);
         starWarsSpiritCharacterAssignment.persist();
 
         id = starWarsSpiritCharacterAssignment.getId();
@@ -24,16 +28,15 @@ public class LikeSpiritCharacterTest extends ResourceTest{
     }
 
     @Test
-    public void testLikeCharacter() {
-        LOGGER.info("Running testLikeCharacter");
+    public void testAddingFeedback() {
         given()
-                .when().get("/devnexus2024/like/" + id)
+                .with()
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .body("{\"id\":" + id + ",\"value\":\"I loved it!\"}")
+                .when().post("/devnexus2024/feedback/")
                 .then()
-                .statusCode(200)
-                .body("isLiked", equalTo(true));
+                .statusCode(201);
 
-        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = StarWarsSpiritCharacterAssignment.findById(id);
-        assertTrue(starWarsSpiritCharacterAssignment.isLiked());
+        assertEquals(1, Feedback.count());
     }
-
 }

@@ -1,6 +1,7 @@
 package io.arrogantprogrammer.devnexusapp;
 
 import io.arrogantprogrammer.devnexusapp.domain.CharacterAssignment;
+import io.arrogantprogrammer.devnexusapp.domain.FeedbackRecord;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -69,7 +70,13 @@ public class DevnexusApiResource {
         return Response.ok().entity(characterAssignment).build();
     }
 
-
-
+    @POST
+    @Path("/feedback/")
+    @Transactional
+    public Response addFeedback(FeedbackRecord feedbackRecord) {
+        LOGGER.debug("Adding feedback for id: {}", feedbackRecord.id());
+        starWarsSpiritCharacterService.addFeedback(feedbackRecord);
+        return Response.created(URI.create("/feedback/" + feedbackRecord.id())).build();
+    }
 
 }
