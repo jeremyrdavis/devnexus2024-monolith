@@ -4,22 +4,17 @@ import io.arrogantprogrammer.devnexusapp.domain.CharacterAssignment;
 import io.arrogantprogrammer.devnexusapp.domain.StarWarsSpiritCharacterAssignment;
 import io.quarkus.test.junit.QuarkusMock;
 import io.quarkus.test.junit.QuarkusTest;
-import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.hamcrest.CoreMatchers.equalTo;
 
 @QuarkusTest
-public class DevnexusApiResourceTest extends ResourceTest {
+public class PoemTest extends ResourceTest{
 
-    @Inject
-    StarWarsSpiritCharacterService starWarsSpiritCharacterService;
     @BeforeEach @Transactional
     public void setUp() {
         LOGGER.info("Setting up test");
@@ -30,20 +25,17 @@ public class DevnexusApiResourceTest extends ResourceTest {
         LOGGER.debug("ID: {}", id);
 
         StarWarsSpiritCharacterService mockSvc = Mockito.mock(StarWarsSpiritCharacterService.class);
-        Mockito.when(mockSvc.addToPoem(id)).thenReturn(new CharacterAssignment(id, name, charachter));
+        Mockito.when(mockSvc.aPoemAbout(id)).thenReturn(new CharacterAssignment(id, name, charachter, whoIs, poem));
         QuarkusMock.installMockForType(mockSvc, StarWarsSpiritCharacterService.class);
     }
+
     @Test
-    public void testSpiritCharacter() {
-        LOGGER.info("Running testSpiritCharacter");
-
+    public void testPoem() {
+        LOGGER.info("Running testPoem");
         given()
-                .when().get("/devnexus2024/Barney")
+                .when().get("/devnexus2024/aPoemAbout/" + id)
                 .then()
-                .statusCode(201)
-                .body("id", is(1))
-                .body("name", is(name))
-                .body("character", equalTo(charachter));
+                .statusCode(200)
+                .body("poem", equalTo(poem));
     }
-
 }
