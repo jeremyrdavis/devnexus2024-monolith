@@ -42,6 +42,7 @@ public class StarWarsSpiritCharacterService {
     }
 
     public CharacterAssignment whoIs(Long id) {
+        LOGGER.debug("Getting whoIs for id: {}", id);
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
         String whoIs = openApiService.whoIsCharacter(starWarsSpiritCharacterAssignment.getCharacterName());
         starWarsSpiritCharacterAssignment.setWhoIs(whoIs);
@@ -50,6 +51,7 @@ public class StarWarsSpiritCharacterService {
     }
 
     public CharacterAssignment aPoemAbout(Long id) {
+        LOGGER.debug("Getting a poem for id: {}", id);
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
         String poem  = openApiService.writeAPoem(starWarsSpiritCharacterAssignment.getCharacterName(), POET.randomPoet());
         starWarsSpiritCharacterAssignment.setPoem(poem);
@@ -58,10 +60,19 @@ public class StarWarsSpiritCharacterService {
     }
 
     public CharacterAssignment addToPoem(Long id) {
+        LOGGER.debug("Adding to poem for id: {}", id);
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
         String updatedPoem  = openApiService.addThisToThePoem(POETICADDITION.addition(), starWarsSpiritCharacterAssignment.getPoem());
         starWarsSpiritCharacterAssignment.setUpdatedPoem(updatedPoem);
         repository.persist(starWarsSpiritCharacterAssignment);
         return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem());
+    }
+
+    public CharacterAssignment like(Long id) {
+        LOGGER.debug("Liking id: {}", id);
+        StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
+        starWarsSpiritCharacterAssignment.setLiked(true);
+        starWarsSpiritCharacterAssignment.persist();
+        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem(), starWarsSpiritCharacterAssignment.isLiked());
     }
 }

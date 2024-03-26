@@ -60,6 +60,15 @@ public class DevnexusApiResource {
         return characterAssignment;
     }
 
+    @GET
+    @Path("/like/{id}")
+    @Transactional
+    public Response like(@PathParam("id") Long id) {
+        LOGGER.debug("Liking id: {}", id);
+        CharacterAssignment characterAssignment = starWarsSpiritCharacterService.like(id);
+        return Response.ok().entity(characterAssignment).build();
+    }
+
 
 
 

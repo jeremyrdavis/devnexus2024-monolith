@@ -9,14 +9,13 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.slf4j.Logger;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.*;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @QuarkusTest
-public class DevnexusApiResourceTest extends ResourceTest {
+public class AssignCharacterTest extends ResourceTest {
 
     @Inject
     StarWarsSpiritCharacterService starWarsSpiritCharacterService;

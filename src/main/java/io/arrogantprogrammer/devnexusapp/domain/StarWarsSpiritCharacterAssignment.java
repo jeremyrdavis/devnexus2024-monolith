@@ -20,6 +20,8 @@ public class StarWarsSpiritCharacterAssignment extends PanacheEntity {
     @Lob
     String updatedPoem;
 
+    boolean isLiked;
+
     public StarWarsSpiritCharacterAssignment() {
     }
 
@@ -72,15 +74,24 @@ public class StarWarsSpiritCharacterAssignment extends PanacheEntity {
         this.whoIs = whoIs;
     }
 
+    public boolean isLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        isLiked = liked;
+    }
+
     @Override
     public String toString() {
         return "StarWarsSpiritCharacterAssignment{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", characterName='" + characterName + '\'' +
                 ", whoIs='" + whoIs + '\'' +
                 ", poem='" + poem + '\'' +
                 ", updatedPoem='" + updatedPoem + '\'' +
-                ", id=" + id +
+                ", isLiked=" + isLiked +
                 '}';
     }
 }
