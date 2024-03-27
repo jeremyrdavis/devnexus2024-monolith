@@ -45,7 +45,7 @@ public class AssignCharacterTest extends ResourceTest {
                 .when().post("/devnexus2024/assign")
                 .then()
                 .statusCode(201)
-                .body("id", is(1))
+                .body("id", equalTo(id.intValue()))
                 .body("name", is(name))
                 .body("character", equalTo(charachter));
     }

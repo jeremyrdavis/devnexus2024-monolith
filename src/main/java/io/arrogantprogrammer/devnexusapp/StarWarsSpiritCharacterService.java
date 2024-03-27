@@ -75,7 +75,9 @@ public class StarWarsSpiritCharacterService {
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = repository.findById(id);
         starWarsSpiritCharacterAssignment.setLiked(true);
         starWarsSpiritCharacterAssignment.persist();
-        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem(), starWarsSpiritCharacterAssignment.isLiked());
+        CharacterAssignment characterAssignment = new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName(), starWarsSpiritCharacterAssignment.getWhoIs(), starWarsSpiritCharacterAssignment.getPoem(), starWarsSpiritCharacterAssignment.getUpdatedPoem(), starWarsSpiritCharacterAssignment.isLiked());
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
+        return characterAssignment;
     }
 
     public void addFeedback(FeedbackRecord feedbackRecord) {

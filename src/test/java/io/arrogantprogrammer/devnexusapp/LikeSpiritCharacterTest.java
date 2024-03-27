@@ -30,7 +30,7 @@ public class LikeSpiritCharacterTest extends ResourceTest{
                 .when().get("/devnexus2024/like/" + id)
                 .then()
                 .statusCode(200)
-                .body("isLiked", equalTo(true));
+                .body("is_liked", equalTo(true));
 
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = StarWarsSpiritCharacterAssignment.findById(id);
         assertTrue(starWarsSpiritCharacterAssignment.isLiked());
