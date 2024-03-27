@@ -11,8 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
-import static org.slf4j.LoggerFactory.getLogger;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.mockito.ArgumentMatchers.any;
 
 @QuarkusTest
 public class AssignCharacterTest extends ResourceTest {
@@ -21,6 +22,7 @@ public class AssignCharacterTest extends ResourceTest {
     StarWarsSpiritCharacterService starWarsSpiritCharacterService;
     @BeforeEach @Transactional
     public void setUp() {
+
         LOGGER.info("Setting up test");
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = new StarWarsSpiritCharacterAssignment(name, charachter);
         starWarsSpiritCharacterAssignment.persist();
@@ -29,15 +31,18 @@ public class AssignCharacterTest extends ResourceTest {
         LOGGER.debug("ID: {}", id);
 
         StarWarsSpiritCharacterService mockSvc = Mockito.mock(StarWarsSpiritCharacterService.class);
-        Mockito.when(mockSvc.addToPoem(id)).thenReturn(new CharacterAssignment(id, name, charachter));
+        Mockito.when(mockSvc.assignSpiritCharacter(name)).thenReturn(new CharacterAssignment(id, name, charachter));
         QuarkusMock.installMockForType(mockSvc, StarWarsSpiritCharacterService.class);
     }
     @Test
-    public void testSpiritCharacter() {
-        LOGGER.info("Running testSpiritCharacter");
+    public void assignSpiritCharacterTest() {
+
+        LOGGER.info("Running assignSpiritCharacterTest");
 
         given()
-                .when().get("/devnexus2024/Barney")
+                .with().body("Barney")
+                .with().contentType("application/json")
+                .when().post("/devnexus2024/assign")
                 .then()
                 .statusCode(201)
                 .body("id", is(1))

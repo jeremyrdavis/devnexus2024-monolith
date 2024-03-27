@@ -38,7 +38,9 @@ public class StarWarsSpiritCharacterService {
         PersonRecord personRecord = swapiClient.getPerson((int) (Math.random() * (count - 1)) + 1);
         StarWarsSpiritCharacterAssignment starWarsSpiritCharacterAssignment = new StarWarsSpiritCharacterAssignment(name, personRecord.name());
         repository.persist(starWarsSpiritCharacterAssignment);
-        return new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName());
+        CharacterAssignment characterAssignment = new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName());
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
+        return characterAssignment; //new CharacterAssignment(starWarsSpiritCharacterAssignment.getId(), starWarsSpiritCharacterAssignment.getName(), starWarsSpiritCharacterAssignment.getCharacterName());
     }
 
     public CharacterAssignment whoIs(Long id) {

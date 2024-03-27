@@ -27,7 +27,9 @@ public class DevnexusApiResource {
     @POST
     @Path("/assign")
     public Response assignSpiritCharacter(String name) {
+        LOGGER.debug("Assigning spirit character for name: {}", name);
         CharacterAssignment characterAssignment = starWarsSpiritCharacterService.assignSpiritCharacter(name);
+        LOGGER.debug("CharacterAssignment: {}", characterAssignment);
         return Response.created(URI.create("/assignment/" + characterAssignment.id())).entity(characterAssignment).build();
     }
 

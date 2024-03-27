@@ -5,7 +5,8 @@ import org.slf4j.Logger;
 import static org.slf4j.LoggerFactory.getLogger;
 
 public class ResourceTest {
-    protected static final Logger LOGGER = getLogger(WhoIsTest.class);
+
+    protected static final Logger LOGGER = getLogger(ResourceTest.class);
     Long id;
     String name = "Barney";
     String charachter = "Yoda";
