@@ -14,8 +14,6 @@ import java.net.URI;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Path("/devnexus2024")
-@Consumes(MediaType.APPLICATION_JSON)
-@Produces(MediaType.APPLICATION_JSON)
 public class DevnexusApiResource {
 
     private static final Logger LOGGER = getLogger(DevnexusApiResource.class);
